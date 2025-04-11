@@ -1,4 +1,4 @@
-// script.js - Section reveal on scroll, typewriter effect, and particle animation for bubbles
+// script.js - Section reveal on scroll, typewriter effect, and bubble animation
 
 console.log("Welcome to my portfolio website!");
 
@@ -35,45 +35,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
   sections.forEach((section) => observer.observe(section));
 
-  // Particle animation for bubbles in the hero section
+  // Bubble Animation for the hero circles
   const circles = document.querySelectorAll('.hero-circles .circle');
   circles.forEach(circle => {
-    let computedStyle = getComputedStyle(circle);
-    let left = parseFloat(computedStyle.left);
-    let top = parseFloat(computedStyle.top);
-    // Store current positions in data attributes
+    // Get initial positions from inline CSS
+    const computedStyle = window.getComputedStyle(circle);
+    const left = parseFloat(computedStyle.left);
+    const top = parseFloat(computedStyle.top);
+    // Store initial positions in data attributes
     circle.dataset.left = left;
     circle.dataset.top = top;
     // Assign random velocities (in pixels per frame)
-    circle.dataset.vx = (Math.random() * 2 - 1) * 2; // e.g., -2 to 2 px per frame
+    circle.dataset.vx = (Math.random() * 2 - 1) * 2;
     circle.dataset.vy = (Math.random() * 2 - 1) * 2;
   });
 
   function animateCircles() {
+    const hero = document.querySelector('.hero');
+    const heroRect = hero.getBoundingClientRect();
+
     circles.forEach(circle => {
       let vx = parseFloat(circle.dataset.vx);
       let vy = parseFloat(circle.dataset.vy);
       let left = parseFloat(circle.dataset.left);
       let top = parseFloat(circle.dataset.top);
 
-      // Update positions based on velocities
       left += vx;
       top += vy;
 
-      // Get hero container dimensions
-      const hero = document.querySelector('.hero');
-      const heroRect = hero.getBoundingClientRect();
       const circleWidth = circle.offsetWidth;
       const circleHeight = circle.offsetHeight;
 
-      // Bounce off left/right edges
-      if (left < 0) { left = 0; vx = -vx; }
-      if (left > heroRect.width - circleWidth) { left = heroRect.width - circleWidth; vx = -vx; }
-      // Bounce off top/bottom edges
-      if (top < 0) { top = 0; vy = -vy; }
-      if (top > heroRect.height - circleHeight) { top = heroRect.height - circleHeight; vy = -vy; }
+      if (left < 0) {
+        left = 0;
+        vx = -vx;
+      }
+      if (left > heroRect.width - circleWidth) {
+        left = heroRect.width - circleWidth;
+        vx = -vx;
+      }
+      if (top < 0) {
+        top = 0;
+        vy = -vy;
+      }
+      if (top > heroRect.height - circleHeight) {
+        top = heroRect.height - circleHeight;
+        vy = -vy;
+      }
 
-      // Update element styles and dataset
       circle.style.left = left + "px";
       circle.style.top = top + "px";
       circle.dataset.left = left;
@@ -81,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
       circle.dataset.vx = vx;
       circle.dataset.vy = vy;
     });
+
     requestAnimationFrame(animateCircles);
   }
   animateCircles();
